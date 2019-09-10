@@ -15,4 +15,27 @@ router.get('/', (req, res) => {
         })
 })
 
+router.post('/', (req, res) => {
+    const carBody = req.body;
+
+    if(carBody.vin && carBody.make && carBody.model && carBody.mileage){
+        db('cars')
+            .insert(carBody, 'id')
+            .then(([id]) => {
+                db('accounts')
+                .where({ id })
+                .first()
+                .then(car => {
+                    res.status(200).json(car)
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                res.status(500).json({ error: 'Could not load accounts'})
+            })
+    } else {
+        return res.status(400).json({ message: "Vin, Make, Model, and Mileage are required"})
+    }
+})
+
 module.exports = router
