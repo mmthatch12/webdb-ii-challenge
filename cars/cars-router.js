@@ -5,7 +5,7 @@ const db = require('../data/db-config')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    db('cars')
+    db('cars2')
         .then(cars => {
             res.status(200).json(cars)
         })
@@ -19,10 +19,10 @@ router.post('/', (req, res) => {
     const carBody = req.body;
 
     if(carBody.vin && carBody.make && carBody.model && carBody.mileage){
-        db('cars')
+        db('cars2')
             .insert(carBody, 'id')
             .then(([id]) => {
-                db('accounts')
+                db('cars2')
                 .where({ id })
                 .first()
                 .then(car => {
